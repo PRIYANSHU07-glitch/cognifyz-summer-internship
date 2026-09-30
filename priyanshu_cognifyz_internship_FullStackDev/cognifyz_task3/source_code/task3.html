@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JAY STUDIO</title>
+
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- google fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <!-- bootstrap icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+
+  <style>
+    
+    :root {
+      --clr-bg:       #0b0d11;
+      --clr-surface:  #13161d;
+      --clr-card:     #1a1e28;
+      --clr-accent1:  #e8ff47;
+      --clr-accent2:  #7b5cfa;
+      --clr-accent3:  #ff5c8a;
+      --clr-text:     #e8eaf0;
+      --clr-muted:    #6b7280;
+      --clr-border:   rgba(255,255,255,0.07);
+      --radius-lg:    1.25rem;
+      --radius-pill:  50rem;
+      --transition:   0.35s cubic-bezier(.4,0,.2,1);
+      --font-display: 'Syne', sans-serif;
+      --font-body:    'DM Sans', sans-serif;
+    }
+
+    
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--clr-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--clr-accent2); border-radius: 3px; }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .5;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h1,h2,h3,h4,h5,h6 { font-family: var(--font-display); font-weight: 700; }
+    .display-title {
+      font-size: clamp(2.6rem, 6vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -.03em;
+    }
+    .section-label {
+      font-family: var(--font-display);
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--clr-accent1);
+    }
+    .accent-text { color: var(--clr-accent1); }
+    .accent2-text { color: var(--clr-accent2); }
+    .muted-text { color: var(--clr-muted); }
+
+    /* ── BUTTONS ── */
+    .btn-neo {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--clr-accent1);
+      color: #0b0d11;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: .9rem;
+      letter-spacing: .04em;
+      padding: .75rem 1.75rem;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-neo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,.2);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s ease;
+    }
+    .btn-neo:hover::after { transform: scaleX(1); }
+    .btn-neo:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(232,255,71,.25); color: #0b0d11; }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: transparent;
+      color: var(--clr-text);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: .9rem;
+      padding: .75rem 1.75rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--clr-border);
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-ghost:hover {
+      border-color: var(--clr-accent2);
+      color: var(--clr-accent2);
+      background: rgba(123,92,250,.07);
+    }
+
+    /* ── NAVBAR ── */
+    .navbar-custom {
+      background: rgba(11,13,17,.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--clr-border);
+      padding: 1rem 0;
+      transition: background var(--transition);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .navbar-brand-text {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--clr-text) !important;
+      letter-spacing: -.02em;
+    }
+    .navbar-brand-text span { color: var(--clr-accent1); }
+    .nav-link-custom {
+      color: var(--clr-muted) !important;
+      font-family: var(--font-display);
+      font-size: .85rem;
+      font-weight: 600;
+      letter-spacing: .05em;
+      padding: .4rem .9rem !important;
+      border-radius: var(--radius-pill);
+      transition: var(--transition);
+    }
+    .nav-link-custom:hover { color: var(--clr-text) !important; background: var(--clr-border); }
+    .nav-link-custom.active { color: var(--clr-accent1) !important; }
+    .navbar-toggler { border: 1px solid var(--clr-border); }
+    .navbar-toggler-icon { filter: invert(1); }
+
+    /* ── HERO SECTION ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 6rem 0 4rem;
+    }
+
+    /* Gradient mesh background */
+    #hero::before {
+      content: '';
+      position: absolute;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(123,92,250,.35) 0%, transparent 70%);
+      top: -200px; right: -200px;
+      border-radius: 50%;
+      animation: floatBlob 8s ease-in-out infinite alternate;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(255,92,138,.2) 0%, transparent 70%);
+      bottom: -100px; left: -100px;
+      border-radius: 50%;
+      animation: floatBlob 11s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes floatBlob {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(40px,60px) scale(1.1); }
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(232,255,71,.1);
+      border: 1px solid rgba(232,255,71,.25);
+      border-radius: var(--radius-pill);
+      padding: .35rem 1rem;
+      font-size: .78rem;
+      font-weight: 600;
+      color: var(--clr-accent1);
+      margin-bottom: 1.5rem;
+      animation: fadeSlideUp .6s ease both;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      background: var(--clr-accent1);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+
+    .hero-title { animation: fadeSlideUp .7s .1s ease both; }
+    .hero-desc  { animation: fadeSlideUp .7s .2s ease both; font-size: 1.05rem; color: var(--clr-muted); max-width: 540px; }
+    .hero-cta   { animation: fadeSlideUp .7s .3s ease both; }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem; flex-wrap: wrap;
+      animation: fadeSlideUp .7s .4s ease both;
+    }
+    .stat-item .num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--clr-text);
+      line-height: 1;
+    }
+    .stat-item .label { font-size: .78rem; color: var(--clr-muted); margin-top: .2rem; }
+
+    .hero-card-float {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      animation: fadeSlideUp .7s .5s ease both, floatCard 6s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card-float::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--clr-accent2), var(--clr-accent1));
+    }
+
+    @keyframes floatCard {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+
+    .code-block {
+      background: #0d1117;
+      border-radius: .75rem;
+      padding: 1rem 1.25rem;
+      font-family: 'Courier New', monospace;
+      font-size: .78rem;
+      line-height: 1.7;
+      border: 1px solid rgba(255,255,255,.05);
+    }
+    .code-kw  { color: #ff79c6; }
+    .code-fn  { color: #50fa7b; }
+    .code-str { color: #f1fa8c; }
+    .code-cm  { color: #6272a4; }
+    .code-prop { color: #8be9fd; }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 6rem 0; }
+    .section-header { margin-bottom: 3.5rem; }
+
+    /* ── FEATURES SECTION ── */
+    #features { background: var(--clr-surface); }
+
+    .feature-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      height: 100%;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(123,92,250,.07), transparent);
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .feature-card:hover { transform: translateY(-6px); border-color: rgba(123,92,250,.4); }
+    .feature-card:hover::after { opacity: 1; }
+
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: .75rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1.25rem;
+    }
+    .fi-purple { background: rgba(123,92,250,.15); color: var(--clr-accent2); }
+    .fi-yellow { background: rgba(232,255,71,.12); color: var(--clr-accent1); }
+    .fi-pink   { background: rgba(255,92,138,.12); color: var(--clr-accent3); }
+    .fi-green  { background: rgba(80,250,123,.12); color: #50fa7b; }
+    .fi-cyan   { background: rgba(139,233,253,.12); color: #8be9fd; }
+    .fi-orange { background: rgba(255,184,108,.12); color: #ffb86c; }
+
+    .feature-card h5 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+    .feature-card p { font-size: .88rem; color: var(--clr-muted); margin: 0; }
+
+    /* ── SHOWCASE / PORTFOLIO SECTION ── */
+    #showcase { position: relative; }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1.25rem;
+    }
+    .showcase-item {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .showcase-item:first-child {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .showcase-thumb {
+      width: 100%; height: 100%;
+      min-height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      transition: transform .5s ease;
+    }
+    .showcase-item:hover .showcase-thumb { transform: scale(1.04); }
+
+    .th-1 { background: linear-gradient(135deg, #7b5cfa 0%, #ff5c8a 100%); min-height: 420px; }
+    .th-2 { background: linear-gradient(135deg, #e8ff47 0%, #50fa7b 100%); }
+    .th-3 { background: linear-gradient(135deg, #0b0d11 0%, #8be9fd 100%); }
+    .th-4 { background: linear-gradient(135deg, #ff5c8a 0%, #ffb86c 100%); }
+    .th-5 { background: linear-gradient(135deg, #50fa7b 0%, #7b5cfa 100%); }
+
+    .showcase-overlay {
+      position: absolute; inset: 0;
+      background: rgba(11,13,17,.7);
+      backdrop-filter: blur(4px);
+      display: flex; flex-direction: column;
+      align-items: flex-start; justify-content: flex-end;
+      padding: 1.5rem;
+      opacity: 0;
+      transition: var(--transition);
+    }
+    .showcase-item:hover .showcase-overlay { opacity: 1; }
+    .showcase-overlay h6 { font-size: .9rem; font-weight: 700; margin-bottom: .25rem; }
+    .showcase-overlay span { font-size: .75rem; color: var(--clr-accent1); }
+
+    .showcase-label {
+      position: absolute; top: 1rem; left: 1rem;
+      background: rgba(11,13,17,.7);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-pill);
+      padding: .25rem .75rem;
+      font-size: .7rem;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ── PROCESS SECTION ── */
+    #process { background: var(--clr-surface); }
+
+    .process-steps {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      left: 28px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--clr-accent2), var(--clr-accent1), var(--clr-accent3));
+    }
+    .process-step {
+      display: flex; gap: 1.5rem; align-items: flex-start;
+      padding: 1.5rem 0;
+      position: relative;
+    }
+    .step-circle {
+      width: 58px; height: 58px; flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--clr-card);
+      border: 2px solid var(--clr-accent2);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--clr-accent2);
+      z-index: 1;
+      transition: var(--transition);
+    }
+    .process-step:hover .step-circle {
+      background: var(--clr-accent2);
+      color: #fff;
+      box-shadow: 0 0 30px rgba(123,92,250,.5);
+    }
+    .step-content h5 { font-size: 1rem; font-weight: 700; margin-bottom: .35rem; }
+    .step-content p  { font-size: .875rem; color: var(--clr-muted); margin: 0; }
+
+    /* ── PRICING SECTION ── */
+    #pricing {}
+
+    .pricing-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      height: 100%;
+      transition: var(--transition);
+      position: relative;
+    }
+    .pricing-card.featured {
+      background: linear-gradient(145deg, rgba(123,92,250,.15), var(--clr-card));
+      border-color: var(--clr-accent2);
+    }
+    .pricing-card:hover { transform: translateY(-5px); box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+
+    .popular-badge {
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--clr-accent2);
+      color: #fff;
+      font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+      padding: .3rem .9rem;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+    }
+    .price-amount {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .price-period { font-size: .85rem; color: var(--clr-muted); }
+    .pricing-feature {
+      display: flex; align-items: center; gap: .75rem;
+      font-size: .875rem;
+      padding: .5rem 0;
+      border-bottom: 1px solid var(--clr-border);
+    }
+    .pricing-feature:last-of-type { border-bottom: none; }
+    .pricing-feature .bi-check-circle-fill { color: var(--clr-accent1); }
+    .pricing-feature .bi-x-circle-fill { color: var(--clr-muted); opacity: .4; }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials { background: var(--clr-surface); }
+
+    .testimonial-card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      height: 100%;
+      transition: var(--transition);
+      position: relative;
+    }
+    .testimonial-card:hover { border-color: rgba(123,92,250,.35); transform: translateY(-4px); }
+    .testimonial-card .quote { font-size: 2.5rem; line-height: 1; color: var(--clr-accent2); margin-bottom: .5rem; }
+    .testimonial-card p { font-size: .9rem; color: var(--clr-muted); font-style: italic; margin-bottom: 1.25rem; }
+    .avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      font-family: var(--font-display);
+      font-weight: 700; font-size: .9rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .av-a { background: linear-gradient(135deg, #7b5cfa, #ff5c8a); }
+    .av-b { background: linear-gradient(135deg, #e8ff47, #50fa7b); color: #0b0d11; }
+    .av-c { background: linear-gradient(135deg, #ff5c8a, #ffb86c); }
+    .reviewer-name { font-weight: 700; font-size: .9rem; margin-bottom: .1rem; }
+    .reviewer-role { font-size: .78rem; color: var(--clr-muted); }
+    .stars { color: var(--clr-accent1); font-size: .85rem; letter-spacing: .05em; }
+
+    /* ── CTA SECTION ── */
+    #cta {
+      background: linear-gradient(135deg, rgba(123,92,250,.2), rgba(255,92,138,.15));
+      border-top: 1px solid var(--clr-border);
+      border-bottom: 1px solid var(--clr-border);
+    }
+    .cta-inner {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: calc(var(--radius-lg) * 1.5);
+      padding: 4rem 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-inner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(123,92,250,.2) 0%, transparent 60%);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--clr-surface);
+      border-top: 1px solid var(--clr-border);
+      padding: 3.5rem 0 2rem;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: -.02em;
+    }
+    .footer-links { list-style: none; padding: 0; }
+    .footer-links li + li { margin-top: .6rem; }
+    .footer-links a {
+      color: var(--clr-muted);
+      text-decoration: none;
+      font-size: .875rem;
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: var(--clr-text); }
+    .footer-heading { font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--clr-muted); margin-bottom: 1rem; }
+    .social-links { display: flex; gap: .75rem; margin-top: 1.25rem; }
+    .social-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--clr-muted);
+      text-decoration: none;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    .social-btn:hover { background: var(--clr-accent2); color: #fff; border-color: var(--clr-accent2); transform: translateY(-3px); }
+    .footer-bottom {
+      border-top: 1px solid var(--clr-border);
+      padding-top: 1.5rem;
+      margin-top: 2.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-bottom p { font-size: .8rem; color: var(--clr-muted); margin: 0; }
+
+    /* ── KEYFRAME ANIMATIONS ── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(1.4); }
+    }
+    @keyframes spinSlow {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes shimmer {
+      from { background-position: -200% 0; }
+      to   { background-position: 200% 0; }
+    }
+
+    /* ── REVEAL ANIMATION (Intersection Observer) ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── SCROLL TO TOP ── */
+    #scrollTop {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      width: 44px; height: 44px;
+      background: var(--clr-accent2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 8px 25px rgba(123,92,250,.4);
+      opacity: 0; pointer-events: none;
+      transform: translateY(10px);
+      transition: var(--transition);
+      z-index: 999;
+    }
+    #scrollTop.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    #scrollTop:hover { background: var(--clr-accent1); color: #0b0d11; }
+
+    /* ── RESPONSIVE OVERRIDES ── */
+    @media (max-width: 991px) {
+      section { padding: 4rem 0; }
+      .showcase-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .showcase-item:first-child {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+      .showcase-item:first-child .showcase-thumb.th-1 { min-height: 280px; }
+    }
+
+    @media (max-width: 767px) {
+      .display-title { font-size: clamp(2rem, 8vw, 3.5rem); }
+      .hero-stats { gap: 1.5rem; }
+      .showcase-grid { grid-template-columns: 1fr; }
+      .showcase-item:first-child { grid-column: span 1; }
+      .process-steps::before { left: 26px; }
+      .cta-inner { padding: 2.5rem 1.5rem; }
+    }
+
+    @media (max-width: 575px) {
+      .hero-cta { flex-direction: column; align-items: flex-start; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+
+    /* ── PROGRESS BARS ── */
+    .skill-bar-label { display: flex; justify-content: space-between; font-size: .8rem; margin-bottom: .4rem; }
+    .skill-bar-track {
+      height: 6px; border-radius: 3px;
+      background: var(--clr-border);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .skill-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--clr-accent2), var(--clr-accent1));
+      width: 0;
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── ACCORDION (FAQ) ── */
+    .faq-item {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: .75rem;
+      margin-bottom: .75rem;
+      overflow: hidden;
+    }
+    .faq-question {
+      padding: 1.1rem 1.5rem;
+      cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 600; font-size: .9rem;
+      transition: var(--transition);
+      user-select: none;
+    }
+    .faq-question:hover { color: var(--clr-accent1); }
+    .faq-question .faq-icon {
+      font-size: 1rem; transition: transform var(--transition);
+      color: var(--clr-accent2);
+    }
+    .faq-item.open .faq-question .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height .45s ease, padding .35s ease;
+      font-size: .875rem; color: var(--clr-muted);
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding: 0 1.5rem 1.25rem; }
+  </style>
+</head>
+<body>
+
+
+<nav class="navbar-custom">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between w-100">
+      <a class="navbar-brand-text" href="#">Pixel<span>Craft</span></a>
+
+     
+      <div class="d-none d-lg-flex align-items-center gap-1">
+        <a href="#features"     class="nav-link-custom active">Features</a>
+        <a href="#showcase"     class="nav-link-custom">Work</a>
+        <a href="#process"      class="nav-link-custom">Process</a>
+        <a href="#pricing"      class="nav-link-custom">Pricing</a>
+        <a href="#testimonials" class="nav-link-custom">Reviews</a>
+        <a href="#faq"          class="nav-link-custom">FAQ</a>
+      </div>
+
+      <div class="d-none d-lg-flex align-items-center gap-2">
+        <a href="#" class="btn-ghost btn-sm py-2 px-3" style="font-size:.8rem">Log in</a>
+        <a href="#cta" class="btn-neo" style="font-size:.8rem;padding:.6rem 1.4rem">Get Started <i class="bi bi-arrow-right"></i></a>
+      </div>
+
+      
+      <button class="navbar-toggler d-lg-none" type="button" id="mobileMenuToggle" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    
+    <div class="d-lg-none" id="mobileMenu" style="display:none!important; padding: 1rem 0;">
+      <div class="d-flex flex-column gap-1">
+        <a href="#features"     class="nav-link-custom">Features</a>
+        <a href="#showcase"     class="nav-link-custom">Work</a>
+        <a href="#process"      class="nav-link-custom">Process</a>
+        <a href="#pricing"      class="nav-link-custom">Pricing</a>
+        <a href="#testimonials" class="nav-link-custom">Reviews</a>
+        <a href="#faq"          class="nav-link-custom">FAQ</a>
+        <div class="d-flex gap-2 mt-2">
+          <a href="#" class="btn-ghost" style="font-size:.85rem">Log in</a>
+          <a href="#cta" class="btn-neo" style="font-size:.85rem">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+<section id="hero">
+  <div class="container position-relative" style="z-index:1">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-6">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Now with AI-powered design tools
+        </div>
+        <h1 class="display-title hero-title mb-4">
+          Build <span class="accent-text">stunning</span> digital experiences
+        </h1>
+        <p class="hero-desc mb-4">
+          A premium design studio toolkit. Craft pixel-perfect interfaces with advanced CSS, fluid animations, and fully responsive layouts that captivate every user.
+        </p>
+        <div class="hero-cta d-flex flex-wrap gap-3 mb-5">
+          <a href="#showcase" class="btn-neo"><i class="bi bi-play-fill"></i> View Our Work</a>
+          <a href="#pricing"  class="btn-ghost"><i class="bi bi-lightning-charge"></i> See Plans</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="num">12K<span class="accent-text">+</span></div>
+            <div class="label">Projects Done</div>
+          </div>
+          <div class="stat-item">
+            <div class="num">98<span class="accent-text">%</span></div>
+            <div class="label">Client Satisfaction</div>
+          </div>
+          <div class="stat-item">
+            <div class="num">5<span class="accent-text">★</span></div>
+            <div class="label">Average Rating</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="hero-card-float">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div style="width:12px;height:12px;border-radius:50%;background:#ff5555;"></div>
+            <div style="width:12px;height:12px;border-radius:50%;background:#ffb86c;"></div>
+            <div style="width:12px;height:12px;border-radius:50%;background:#50fa7b;"></div>
+            <span style="font-size:.75rem;color:var(--clr-muted);margin-left:.5rem;">styles.css</span>
+          </div>
+          <div class="code-block">
+            <div><span class="code-cm">/* Advanced CSS — PixelCraft */</span></div>
+            <div><span class="code-prop">.hero</span> {</div>
+            <div>&nbsp;&nbsp;<span class="code-prop">background</span>: <span class="code-fn">radial-gradient</span>(</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">ellipse at 70% 30%,</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">#7b5cfa 0%, transparent 60%</span></div>
+            <div>&nbsp;&nbsp;);</div>
+            <div>&nbsp;&nbsp;<span class="code-prop">animation</span>: <span class="code-fn">float</span> <span class="code-str">6s ease-in-out infinite</span>;</div>
+            <div>&nbsp;&nbsp;<span class="code-prop">transition</span>: <span class="code-fn">all</span> <span class="code-str">.35s cubic-bezier(.4,0,.2,1)</span>;</div>
+            <div>}</div>
+            <br/>
+            <div><span class="code-kw">@keyframes</span> <span class="code-fn">float</span> {</div>
+            <div>&nbsp;&nbsp;<span class="code-str">0%,100%</span> { <span class="code-prop">transform</span>: <span class="code-fn">translateY</span>(<span class="code-str">0</span>); }</div>
+            <div>&nbsp;&nbsp;<span class="code-str">50%</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span class="code-prop">transform</span>: <span class="code-fn">translateY</span>(<span class="code-str">-12px</span>); }</div>
+            <div>}</div>
+          </div>
+
+          
+          <div class="mt-3">
+            <div class="skill-bar-label"><span>CSS Mastery</span><span class="accent-text">96%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="96"></div></div>
+            <div class="skill-bar-label"><span>Responsive Design</span><span class="accent-text">92%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="92"></div></div>
+            <div class="skill-bar-label"><span>Animations</span><span class="accent-text">88%</span></div>
+            <div class="skill-bar-track"><div class="skill-bar-fill" data-width="88"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="features">
+  <div class="container">
+    <div class="row section-header reveal">
+      <div class="col-lg-7">
+        <p class="section-label">What We Do</p>
+        <h2 class="display-5 fw-bold mb-3">Every tool you need to <span class="accent-text">design faster</span></h2>
+        <p class="muted-text">From grid systems to CSS custom properties — everything to turn your vision into production-grade code.</p>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon fi-purple"><i class="bi bi-grid-1x2-fill"></i></div>
+          <h5>Complex Layouts</h5>
+          <p>Build multi-section layouts with CSS Grid, Flexbox, and Bootstrap's 12-column system. Asymmetric, overlapping, or classic — anything goes.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon fi-yellow"><i class="bi bi-magic"></i></div>
+          <h5>CSS Transitions & Animations</h5>
+          <p>Smooth hover states, keyframe animations, staggered reveals, and scroll-triggered effects that make your UI feel alive.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon fi-pink"><i class="bi bi-phone-landscape-fill"></i></div>
+          <h5>Fully Responsive</h5>
+          <p>Mobile-first design using Bootstrap's breakpoints plus custom media queries. Looks perfect from 320 px to 4K.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon fi-green"><i class="bi bi-palette2"></i></div>
+          <h5>CSS Custom Properties</h5>
+          <p>Theming with CSS variables for colours, spacing, and typography. Switch entire looks with a few variable overrides.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon fi-cyan"><i class="bi bi-bootstrap-fill"></i></div>
+          <h5>Bootstrap 5 Framework</h5>
+          <p>Leverage Bootstrap's utility classes, responsive grid, and components for rapid, consistent UI development.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="feature-card">
+          <div class="feature-icon fi-orange"><i class="bi bi-layers-fill"></i></div>
+          <h5>Visual Depth & Effects</h5>
+          <p>Gradient meshes, backdrop blur, noise overlays, box shadows, and glassmorphism — layers of depth that elevate perception.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="showcase">
+  <div class="container">
+    <div class="row section-header reveal">
+      <div class="col-lg-7">
+        <p class="section-label">Our Work</p>
+        <h2 class="display-5 fw-bold mb-3">Projects that <span class="accent2-text">speak for themselves</span></h2>
+        <p class="muted-text">Hover over each card to see the project details.</p>
+      </div>
+    </div>
+    <div class="showcase-grid reveal">
+      <div class="showcase-item">
+        <div class="showcase-thumb th-1">
+          <div style="font-size:4rem;opacity:.3;"><i class="bi bi-globe2"></i></div>
+        </div>
+        <span class="showcase-label">Featured</span>
+        <div class="showcase-overlay">
+          <h6>NovaBrand — Full Redesign</h6>
+          <span>Web Design · CSS Animation</span>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-thumb th-2">
+          <div style="font-size:2.5rem;opacity:.3;color:#0b0d11;"><i class="bi bi-bar-chart-fill"></i></div>
+        </div>
+        <div class="showcase-overlay">
+          <h6>DataDash Analytics</h6>
+          <span>Dashboard · Bootstrap</span>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-thumb th-3">
+          <div style="font-size:2.5rem;opacity:.3;"><i class="bi bi-phone-fill"></i></div>
+        </div>
+        <div class="showcase-overlay">
+          <h6>CoolApp Landing Page</h6>
+          <span>Responsive · Mobile First</span>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-thumb th-4">
+          <div style="font-size:2.5rem;opacity:.3;"><i class="bi bi-cart4"></i></div>
+        </div>
+        <div class="showcase-overlay">
+          <h6>ShopFlow Commerce</h6>
+          <span>E-Commerce · Flexbox Grid</span>
+        </div>
+      </div>
+      <div class="showcase-item">
+        <div class="showcase-thumb th-5">
+          <div style="font-size:2.5rem;opacity:.3;color:#0b0d11;"><i class="bi bi-music-note-beamed"></i></div>
+        </div>
+        <div class="showcase-overlay">
+          <h6>SoundWave Studio</h6>
+          <span>Creative · Keyframes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="process">
+  <div class="container">
+    <div class="row section-header reveal">
+      <div class="col-lg-7">
+        <p class="section-label">How It Works</p>
+        <h2 class="display-5 fw-bold mb-3">Our <span class="accent-text">design</span> process</h2>
+        <p class="muted-text">From blank canvas to a polished, deployed product — five focused steps.</p>
+      </div>
+    </div>
+    <div class="row g-5">
+      <div class="col-lg-6 reveal">
+        <div class="process-steps">
+          <div class="process-step">
+            <div class="step-circle">01</div>
+            <div class="step-content">
+              <h5>Discovery & Planning</h5>
+              <p>Understanding goals, audience, and brand. We map out a content hierarchy and layout blueprint before touching code.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">02</div>
+            <div class="step-content">
+              <h5>Design & Prototyping</h5>
+              <p>Wireframes evolve into high-fidelity mockups. Colour palettes, typography, and spacing systems are locked in.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">03</div>
+            <div class="step-content">
+              <h5>Advanced CSS Development</h5>
+              <p>We write clean, modular CSS with custom properties, transitions, animations, and responsive breakpoints.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">04</div>
+            <div class="step-content">
+              <h5>Bootstrap Integration</h5>
+              <p>We layer in Bootstrap's grid and utilities, overriding defaults with our design tokens for a fully consistent UI.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <div class="step-circle">05</div>
+            <div class="step-content">
+              <h5>Testing & Delivery</h5>
+              <p>Cross-browser and multi-device QA. Performance audit, accessibility check, then handoff or deployment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 reveal d-flex align-items-center justify-content-center">
+        <!-- Animated graphic -->
+        <div style="position:relative;width:320px;height:320px;">
+          <div style="position:absolute;inset:0;border-radius:50%;border:2px dashed var(--clr-border);animation:spinSlow 20s linear infinite;"></div>
+          <div style="position:absolute;inset:30px;border-radius:50%;border:2px dashed rgba(123,92,250,.3);animation:spinSlow 15s linear infinite reverse;"></div>
+          <div style="position:absolute;inset:60px;border-radius:50%;border:2px solid rgba(232,255,71,.2);animation:spinSlow 10s linear infinite;"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;">
+            <div style="font-size:3rem;"><i class="bi bi-hexagon-fill" style="color:var(--clr-accent2);"></i></div>
+            <div style="font-family:var(--font-display);font-weight:800;font-size:1.1rem;margin-top:.5rem;">Design<br><span class="accent-text">System</span></div>
+          </div>
+          <!-- Orbiting dots -->
+          <div style="position:absolute;top:10px;left:50%;transform:translateX(-50%);width:14px;height:14px;background:var(--clr-accent1);border-radius:50%;box-shadow:0 0 14px var(--clr-accent1);animation:spinSlow 20s linear infinite;transform-origin:0 150px;"></div>
+          <div style="position:absolute;top:50%;right:10px;transform:translateY(-50%);width:10px;height:10px;background:var(--clr-accent3);border-radius:50%;box-shadow:0 0 10px var(--clr-accent3);"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="pricing">
+  <div class="container">
+    <div class="row section-header reveal text-center justify-content-center">
+      <div class="col-lg-6">
+        <p class="section-label">Pricing</p>
+        <h2 class="display-5 fw-bold mb-3">Simple, transparent plans</h2>
+        <p class="muted-text">No hidden fees. Cancel anytime.</p>
+      </div>
+    </div>
+    <div class="row g-4 justify-content-center">
+      <!-- Starter -->
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="pricing-card">
+          <p class="section-label mb-2">Starter</p>
+          <div class="price-amount mb-1">$0 <span class="price-period">/ mo</span></div>
+          <p class="muted-text" style="font-size:.85rem;margin-bottom:1.5rem;">Perfect for learning.</p>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> 3 Projects</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Bootstrap Grid Access</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Basic CSS Templates</div>
+          <div class="pricing-feature"><i class="bi bi-x-circle-fill"></i> Advanced Animations</div>
+          <div class="pricing-feature"><i class="bi bi-x-circle-fill"></i> Custom Properties Kit</div>
+          <a href="#" class="btn-ghost w-100 justify-content-center mt-3">Get Started</a>
+        </div>
+      </div>
+           <div class="col-md-6 col-lg-4 reveal">
+        <div class="pricing-card featured">
+          <div class="popular-badge">Most Popular</div>
+          <p class="section-label mb-2" style="color:var(--clr-accent2);">Pro</p>
+          <div class="price-amount mb-1">$29 <span class="price-period">/ mo</span></div>
+          <p class="muted-text" style="font-size:.85rem;margin-bottom:1.5rem;">For serious designers.</p>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Unlimited Projects</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Full Bootstrap Framework</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Advanced CSS Animations</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> CSS Custom Properties Kit</div>
+          <div class="pricing-feature"><i class="bi bi-x-circle-fill"></i> White-label Exports</div>
+          <a href="#" class="btn-neo w-100 justify-content-center mt-3">Start Free Trial <i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+      
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="pricing-card">
+          <p class="section-label mb-2">Agency</p>
+          <div class="price-amount mb-1">$79 <span class="price-period">/ mo</span></div>
+          <p class="muted-text" style="font-size:.85rem;margin-bottom:1.5rem;">For teams &amp; studios.</p>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Unlimited Projects</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Full Bootstrap Framework</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> Advanced CSS Animations</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> CSS Custom Properties Kit</div>
+          <div class="pricing-feature"><i class="bi bi-check-circle-fill"></i> White-label Exports</div>
+          <a href="#" class="btn-ghost w-100 justify-content-center mt-3">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="testimonials">
+  <div class="container">
+    <div class="row section-header reveal">
+      <div class="col-lg-7">
+        <p class="section-label">Testimonials</p>
+        <h2 class="display-5 fw-bold mb-3">Loved by <span class="accent-text">thousands</span> of creatives</h2>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="testimonial-card">
+          <div class="quote">"</div>
+          <p>The CSS animation toolkit is outstanding. I built a full product landing page with smooth scroll-triggered reveals in under a day. Completely changed my workflow.</p>
+          <div class="stars mb-3">★★★★★</div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar av-a">AK</div>
+            <div>
+              <div class="reviewer-name">Arjun Kapoor</div>
+              <div class="reviewer-role">Frontend Developer, Bangalore</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="testimonial-card">
+          <div class="quote">"</div>
+          <p>Bootstrap 5 integration is seamless here. The custom property overrides made theming effortless — our whole design system is now consistent and maintainable.</p>
+          <div class="stars mb-3">★★★★★</div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar av-b">SM</div>
+            <div>
+              <div class="reviewer-name">Sara Miyamoto</div>
+              <div class="reviewer-role">UX Engineer, Tokyo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4 reveal">
+        <div class="testimonial-card">
+          <div class="quote">"</div>
+          <p>Responsive design used to be my biggest pain point. With this toolkit and the media query patterns provided, everything just works across all screen sizes from day one.</p>
+          <div class="stars mb-3">★★★★★</div>
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar av-c">LP</div>
+            <div>
+              <div class="reviewer-name">Liam Park</div>
+              <div class="reviewer-role">UI Designer, Sydney</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="faq">
+  <div class="container">
+    <div class="row section-header reveal text-center justify-content-center">
+      <div class="col-lg-6">
+        <p class="section-label">FAQ</p>
+        <h2 class="display-5 fw-bold mb-3">Common <span class="accent-text">questions</span></h2>
+      </div>
+    </div>
+    <div class="row justify-content-center reveal">
+      <div class="col-lg-8">
+        <div class="faq-item">
+          <div class="faq-question">What CSS features are covered? <span class="faq-icon"><i class="bi bi-plus"></i></span></div>
+          <div class="faq-answer">We cover CSS custom properties (variables), transitions, keyframe animations, transforms, grid, flexbox, filters, backdrop-blur, clip-path, and more — all with real production examples.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is Bootstrap 5 required? <span class="faq-icon"><i class="bi bi-plus"></i></span></div>
+          <div class="faq-answer">No. Bootstrap 5 is optional and layered on top. All core layouts and custom CSS work standalone. Bootstrap simply accelerates the grid and component layer.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How is responsiveness handled? <span class="faq-icon"><i class="bi bi-plus"></i></span></div>
+          <div class="faq-answer">We use a mobile-first approach: base styles target small screens, then Bootstrap breakpoints (sm, md, lg, xl, xxl) and custom media queries extend the layout for larger viewports.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I use this commercially? <span class="faq-icon"><i class="bi bi-plus"></i></span></div>
+          <div class="faq-answer">Absolutely. Pro and Agency plans include full commercial usage rights and white-label export options for client projects.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Do animations affect performance? <span class="faq-icon"><i class="bi bi-plus"></i></span></div>
+          <div class="faq-answer">All animations use GPU-composited properties — transform and opacity — to avoid layout thrashing. We also include prefers-reduced-motion support out of the box.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section id="cta">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <div style="position:relative;z-index:1;">
+        <p class="section-label mb-3">Ready to Build?</p>
+        <h2 class="display-5 fw-bold mb-4">Start crafting beautiful<br><span class="accent-text">responsive interfaces</span> today</h2>
+        <p class="muted-text mb-4" style="max-width:480px;margin:0 auto 2rem;">No credit card required. Explore the Starter plan free forever, or jump into Pro for the full toolkit.</p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
+          <a href="#pricing" class="btn-neo"><i class="bi bi-rocket-takeoff-fill"></i> Get Started Free</a>
+          <a href="#features" class="btn-ghost"><i class="bi bi-book-fill"></i> Read the Docs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<footer>
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand mb-2">Pixel<span class="accent-text">Craft</span></div>
+        <p class="muted-text" style="font-size:.875rem;max-width:280px;">Premium CSS &amp; design toolkit for frontend developers and creative studios worldwide.</p>
+        <div class="social-links">
+          <a href="#" class="social-btn"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-github"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-dribbble"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <p class="footer-heading">Product</p>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#showcase">Showcase</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <p class="footer-heading">Resources</p>
+        <ul class="footer-links">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">CSS Cheatsheet</a></li>
+          <li><a href="#">Bootstrap Guide</a></li>
+          <li><a href="#">Animations Kit</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <p class="footer-heading">Company</p>
+        <ul class="footer-links">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <p class="footer-heading">Legal</p>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="#">License</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 PixelCraft Studio. All rights reserved.</p>
+      <p>Built with <span class="accent-text">♥</span> using Bootstrap 5 &amp; Advanced CSS</p>
+    </div>
+  </div>
+</footer>
+
+
+<button id="scrollTop" aria-label="Scroll to top"><i class="bi bi-chevron-up"></i></button>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+        barObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.hero-card-float').forEach(el => barObserver.observe(el));
+
+  
+  const scrollBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('show', window.scrollY > 400);
+  });
+  scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  mobileMenuToggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.style.display === 'flex';
+    mobileMenu.style.display = isOpen ? 'none' : 'flex';
+    mobileMenu.style.flexDirection = 'column';
+  });
+  
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.style.display = 'none';
+    });
+  });
+
+  
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link-custom');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

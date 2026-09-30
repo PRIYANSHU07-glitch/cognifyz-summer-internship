@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 1: Basic Server Interaction</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h2>Task 1: Server-Side Rendering</h2>
+            <p class="app-description">
+                <strong>Objective:</strong> Introduce server-side rendering and basic form submissions.<br><br>
+                <strong>How it works:</strong> Unlike a Single Page Application (like React), this page is fully generated on the Node.js backend using Express and the EJS templating engine. When you submit the form below, the server catches the POST request, processes the data, and renders a completely new HTML page dynamically displaying your input.
+            </p>
+        </header>
+
+        <div class="form-section">
+            <h3>Submit Your Information</h3>
+            <form action="/submit-form" method="POST">
+                <div class="input-group">
+                    <label for="username">Your Name:</label>
+                    <input type="text" id="username" name="username" required placeholder="Enter your name">
+                </div>
+                
+                <div class="input-group">
+                    <label for="message">Your Message:</label>
+                    <textarea id="message" name="message" required placeholder="Enter a brief message..." rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Send to Server</button>
+            </form>
+        </div>
+
+        <% if (submission) { %>
+            <div class="server-response">
+                <h3>Server Received Your Data!</h3>
+                <p><strong>Name received:</strong> <%= submission.name %></p>
+                <p><strong>Message received:</strong> <%= submission.message %></p>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

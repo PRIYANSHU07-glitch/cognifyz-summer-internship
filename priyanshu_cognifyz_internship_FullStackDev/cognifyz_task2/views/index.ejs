@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 2: Validation & Storage</title>
+    <link rel="stylesheet" href="/style.css">
+    
+    <script>
+        function validateClientSide() {
+            const username = document.getElementById('username').value;
+            const age = document.getElementById('age').value;
+
+            if (username.trim() === "") {
+                alert("Client-Side Error: Username cannot be blank!");
+                return false; // Stops the form from submitting to the server
+            }
+            if (age < 18) {
+                alert("Client-Side Error: You must be 18 or older to register.");
+                return false; // Stops the form
+            }
+            return true; // Form is good, send to server!
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header class="app-header">
+            <h2>Task 2: Advanced Forms & Validation</h2>
+            <div class="app-description">
+                <strong>Objective:</strong> Expand inline styles and introduce dual-layer validation.<br><br>
+                <strong>How it works:</strong>
+                <ul style="margin-top: 5px; padding-left: 20px;">
+                    <li><strong>Step 1 & 2:</strong> The form below uses inline CSS styles for its layout. When you click submit, an inline JavaScript function checks if you are 18+. If you aren't, it stops the submission immediately.</li>
+                    <li><strong>Step 3 & 4:</strong> If the client validation passes, data goes to the Node.js server. The server runs its own strict checks. If valid, it saves the data to a temporary JavaScript Array (server-side storage) and displays it below.</li>
+                </ul>
+            </div>
+        </header>
+
+        <% if (error) { %>
+            <div class="alert alert-error"><%= error %></div>
+        <% } %>
+        <% if (success) { %>
+            <div class="alert alert-success"><%= success %></div>
+        <% } %>
+
+        <form action="/register" method="POST" onsubmit="return validateClientSide()" style="background-color: #f8f9fa; padding: 25px; border-radius: 8px; border: 1px solid #dee2e6;">
+            
+            <div style="margin-bottom: 15px;">
+                <label for="username" style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">Username:</label>
+                <input type="text" id="username" name="username" style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label for="email" style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">Email Address:</label>
+                <input type="email" id="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label for="age" style="display: block; font-weight: bold; margin-bottom: 5px; color: #333;">Age:</label>
+                <input type="number" id="age" name="age" required style="width: 100%; padding: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box;">
+            </div>
+
+            <button type="submit" style="background-color: #4facfe; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px;">Register Account</button>
+        </form>
+
+        <div class="database-section">
+            <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px;">Temporary Database Records</h3>
+            <% if (users && users.length > 0) { %>
+                <ul style="list-style-type: none; padding: 0;">
+                    <% users.forEach(function(user) { %>
+                        <li style="background: #e3f2fd; margin-bottom: 8px; padding: 12px; border-radius: 4px; border-left: 4px solid #2196f3;">
+                            <strong><%= user.username %></strong> (<%= user.email %>) - Age: <%= user.age %>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } else { %>
+                <p style="color: #777; font-style: italic;">No validated users stored yet.</p>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
